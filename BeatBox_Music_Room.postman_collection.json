@@ -1,0 +1,749 @@
+{
+  "info": {
+    "name": "BeatBox Music Room",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Run on a fresh database (npm run reset, then npm start). Run requests in order."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Get all instruments",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Returns an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Get one instrument",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments",
+            "1"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Get missing instrument (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments/999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments",
+            "999"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Add instrument",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Djembe\",\n  \"family\": \"Percussion\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/instruments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Add instrument - validation error (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 400', () => pm.response.to.have.status(400));",
+              "pm.test('Clear error message', () => pm.expect(pm.response.json().error).to.include('Validation failed'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/instruments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments"
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Update instrument",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Djembe Large\",\n  \"family\": \"Percussion\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/instruments/7",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments",
+            "7"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Delete instrument",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments/7",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments",
+            "7"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Search by family (?family=strings)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('3 string instruments', () => pm.expect(pm.response.json()).to.have.lengthOf(3));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments?family=strings",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments"
+          ],
+          "query": [
+            {
+              "key": "family",
+              "value": "strings"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "9.1 Create loan (musician 1, instrument 1)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 1,\n  \"instrument_id\": 1,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "9.2 Create loan (musician 2, instrument 1)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 2,\n  \"instrument_id\": 1,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "9.3 Create loan (musician 3, instrument 4)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 3,\n  \"instrument_id\": 4,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "10. TWIST Test 3: only 2 instruments used",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Just 2 instruments', () => pm.expect(pm.response.json()).to.have.lengthOf(2));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments/top",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments",
+            "top"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11.1 Create loan (musician 4, instrument 4)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 4,\n  \"instrument_id\": 4,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11.2 Create loan (musician 5, instrument 2)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 5,\n  \"instrument_id\": 2,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11.3 Create loan (musician 1, instrument 2)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 1,\n  \"instrument_id\": 2,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11.4 Create loan (musician 2, instrument 5)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 2,\n  \"instrument_id\": 5,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "11.5 Create loan (musician 3, instrument 1)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201', () => pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 3,\n  \"instrument_id\": 1,\n  \"loan_date\": \"2026-11-16\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "12. TWIST Test 2: top 3, highest count first",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "const r = pm.response.json();",
+              "pm.test('3 instruments', () => pm.expect(r).to.have.lengthOf(3));",
+              "pm.test('Highest count first', () => pm.expect(r[0].loan_count).to.be.at.least(r[1].loan_count));",
+              "pm.test('Tie listed alphabetically', () => pm.expect(r[1].name).to.eql('Acoustic Guitar'));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/instruments/top",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "instruments",
+            "top"
+          ]
+        }
+      }
+    },
+    {
+      "name": "13. Join: loans with musician and instrument names",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+              "pm.test('Has names', () => { const r = pm.response.json()[0]; pm.expect(r).to.have.property('musician_name'); pm.expect(r).to.have.property('instrument_name'); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "14. Create loan - validation error (400)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 400', () => pm.response.to.have.status(400));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": \"abc\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "15. Create loan - missing musician (404)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 404', () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"musician_id\": 999,\n  \"instrument_id\": 1\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/loans",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans"
+          ]
+        }
+      }
+    },
+    {
+      "name": "16. Return an instrument",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', () => pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/loans/1/return",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "loans",
+            "1",
+            "return"
+          ]
+        }
+      }
+    }
+  ]
+}

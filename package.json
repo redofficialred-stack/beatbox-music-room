@@ -1,0 +1,11 @@
+{
+  "name": "beatbox-music-room-api",
+  "version": "1.0.0",
+  "description": "BeatBox Music Room instrument loan API - BDF Group Assignment (Theme 9, NU-AIAGAI2C-G09)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "reset": "node -e \"require('fs').rmSync('db/beatbox.db',{force:true});console.log('Database reset')\""
+  },
+  "dependencies": { "express": "^4.19.2", "sqlite3": "^5.1.7" }
+}
